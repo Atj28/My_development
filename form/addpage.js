@@ -3,7 +3,6 @@ import { Form, Button, Row, Col } from 'react-bootstrap';
 import './hail.css';
 import ReactTooltip from 'react-tooltip';
 import SwitchControl from './SwitchControl';
-import { getUser, getUserEmail } from "../auth/userinfo";
 
 
 const AddHailForm = ({ onCancel, onSubmit}) => {
