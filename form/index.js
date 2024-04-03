@@ -3,13 +3,8 @@ import { Form, Button, Row, Col } from 'react-bootstrap';
 import './hail.css';
 import ReactTooltip from 'react-tooltip';
 import SwitchControl from './SwitchControl';
-import { isSite } from '../layout/criteria';
-import { useCriteriaContext } from '../../context/criteria.context';
-import { getSites } from '../../model/metadata';
 import { IoAddCircleOutline } from 'react-icons/io5';
 import AddHailForm from './addSite';
-import { getUserID, isAdminUser } from "../auth/userinfo";
-import { GetFQURL, postJSONData } from "../model/store.swr";
 import { Toast } from 'react-bootstrap';
 import styled from 'styled-components'
 
@@ -25,10 +20,8 @@ const HailSettings = () => {
   const [showAddForm, setShowAddForm] = useState(false);
   const [toggle1, setToggle1] = useState(false);
   const [toggle2, setToggle2] = useState(false);
-  const criteria = useCriteriaContext();
-  const siteValue = isSite(criteria) ? criteria.site : null;
+  const siteValue = 'anup';
   const [sites, setSites] = useState(null); 
-  const criteriaContext = useCriteriaContext();
   const [latitudeValue, setLatitudeValue] = useState(''); 
   const [longitudeValue, setLongitudeValue] = useState(''); 
   const [editedHailEnabled, setEditedHailEnabled] = useState(false);
@@ -41,15 +34,7 @@ const HailSettings = () => {
   const [errorMessage, setErrorMessage] = useState(null);
 
   useEffect(() => {
-    const setInitialValues = () => {
-      if (editable && criteriaContext.site && sites === null) {
-        getSites(criteriaContext, (data) => {
-          console.log('Data received:', data);
-          setSites(data && data.length > 0 ? data : []);
-        });
-      }
-  
-      if (criteriaContext.site && sites !== null) {
+      if (sites !== null) {
         const selectedSite = sites.find((site) => site.site_id === siteValue);
         // console.log('Selected Site:', selectedSite);
   
@@ -78,7 +63,7 @@ const HailSettings = () => {
     };
   
     setInitialValues();
-  }, [editable, criteriaContext.site, sites, siteValue]);
+  }, [editable, sites, siteValue]);
   
   
   
@@ -175,7 +160,7 @@ const HailSettings = () => {
         longitudeValue,
     };
     console.log('Data submitted:', postData);
-    const apiUrl = "/meta?querytype=meta_sites_hail_update"; 
+    const apiUrl = "hail_update"; 
     postJSONData(apiUrl, postData, (response) => {
         console.log('Server response:', response);
 
@@ -200,7 +185,6 @@ const handleSuccessfulResponse = (response) => {
     console.log('Form canceled');
     setEditable(true);
     getSites(
-      criteriaContext,
       (data) => {
         console.log('Data received:', data);
         setSites(data && data.length > 0 ? data : []);
