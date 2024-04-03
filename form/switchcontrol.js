@@ -1,6 +1,5 @@
 import React from 'react';
 import styled from 'styled-components';
-import nextId from 'react-id-generator';
 
 const Styles = styled.div`
   display: flex;
